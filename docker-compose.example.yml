@@ -1,0 +1,167 @@
+services:
+  # PostgreSQL con pgvector
+  postgres:
+    image: pgvector/pgvector:pg15
+    container_name: sgd-postgres
+    environment:
+      POSTGRES_DB: sgd_ugel
+      POSTGRES_USER: sgd_user
+      POSTGRES_PASSWORD: sgd_pass
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-db-complete.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sgd_user -d sgd_ugel"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis
+  redis:
+    image: redis:7-alpine
+    container_name: sgd-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # MinIO
+  minio:
+    image: minio/minio:latest
+    container_name: sgd-minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sgd-backend
+    ports:
+      - "8000:8000"
+    environment:
+      # Database
+      DATABASE_URL: postgresql://sgd_user:sgd_pass@postgres:5432/sgd_ugel
+      
+      # Redis & Celery
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      
+      # MinIO
+      MINIO_ENDPOINT: minio:9000
+      MINIO_EXTERNAL_ENDPOINT: localhost:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: documentos-ugel
+      MINIO_SECURE: "false"
+      
+      # Google AI (REEMPLAZAR CON TU API KEY)
+      GOOGLE_API_KEY: "your_google_api_key_here"
+      GEMINI_MODEL: gemini-2.5-pro
+      EMBEDDING_MODEL: models/text-embedding-004
+      EMBEDDING_DIMENSION: 768
+      
+      # App config
+      API_BASE_URL: http://localhost:8000
+      ENVIRONMENT: development
+      DEBUG: "true"
+      LOG_LEVEL: INFO
+      MAX_UPLOAD_SIZE_MB: 50
+      TESSERACT_LANG: spa
+      CHUNK_SIZE: 800
+      CHUNK_OVERLAP: 100
+      SEARCH_TOP_K: 5
+      
+      # CORS
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/tmp/sgd-uploads
+
+  # Celery Worker
+  celery:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: sgd-celery
+    command: celery -A app.workers.celery_app worker --loglevel=info --concurrency=2
+    environment:
+      DATABASE_URL: postgresql://sgd_user:sgd_pass@postgres:5432/sgd_ugel
+      REDIS_URL: redis://redis:6379/0
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/0
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: documentos-ugel
+      MINIO_SECURE: "false"
+      GOOGLE_API_KEY: "your_google_api_key_here"
+      GEMINI_MODEL: gemini-2.5-pro
+      ENVIRONMENT: development
+      LOG_LEVEL: INFO
+    depends_on:
+      - postgres
+      - redis
+      - minio
+    restart: unless-stopped
+    volumes:
+      - ./backend:/app
+      - backend_uploads:/tmp/sgd-uploads
+
+  # Frontend (desarrollo)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    container_name: sgd-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+      VITE_APP_TITLE: "SGD"
+      VITE_ENVIRONMENT: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+  backend_uploads:

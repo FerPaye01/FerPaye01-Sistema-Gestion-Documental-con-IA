@@ -1,0 +1,38 @@
+# FastAPI and server
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Database - SQLite incluido en Python
+sqlalchemy==2.0.23
+alembic==1.12.1
+
+# Document processing
+PyMuPDF==1.23.8
+Pillow==10.1.0
+
+# AI services (opcional)
+google-generativeai==0.3.1
+
+# Utilities
+pydantic==2.5.0
+pydantic-settings==2.1.0
+python-dotenv==1.0.0
+
+# Logging
+structlog==23.2.0
+
+# Testing (opcional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+httpx==0.25.2
+
+# OCR (opcional - requiere Tesseract instalado)
+# pytesseract==0.3.10
+
+# NO INCLUIDOS (no necesarios para Windows 7):
+# - psycopg2-binary (PostgreSQL)
+# - pgvector (búsqueda semántica)
+# - celery (procesamiento asíncrono)
+# - redis (cache)
+# - minio (almacenamiento distribuido)
