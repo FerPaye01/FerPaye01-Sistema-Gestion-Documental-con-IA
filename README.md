@@ -1,14 +1,27 @@
 # SGD - Sistema de Gestión Documental Inteligente
 
-**Versión**: 2.0  
-**Estado**: ✅ Producción  
-**Última actualización**: Noviembre 2025
+📚 **Documentación completa en la carpeta [`docs/`](docs/)**
 
-## 📋 Descripción
+## 📙 Descripción
 
 Sistema de Gestión Documental (SGD) inteligente que implementa búsqueda semántica con IA, extracción automática de metadatos, OCR y clasificación de documentos administrativos.
 
-> 📚 **Documentación completa en la carpeta [`docs/`](docs/)**
+## � *Estado del Proyecto
+
+Actualmente el proyecto se encuentra en **producción**. El sistema está completamente funcional y listo para desplegar. Se espera mejorar el proyecto con el paso del tiempo, aprendiendo nuevos patrones de diseño y nuevas formas de presentar la información.
+
+**Versión**: 2.0  
+**Última actualización**: Noviembre 2025
+
+## 📌 Índice
+
+- [Descripción](#-descripción)
+- [Estado del Proyecto](#-estado-del-proyecto)
+- [Características](#-características-principales)
+- [Acceso al Proyecto](#-acceso-al-proyecto)
+- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
+- [Personas Desarrolladoras](#-personas-desarrolladoras)
+- [Licencia](#-licencia)
 
 ## 🎯 Características Principales
 
@@ -44,38 +57,33 @@ Sistema de Gestión Documental (SGD) inteligente que implementa búsqueda semán
    └───────┘  └────────┘  └────────┘
 ```
 
-## 🚀 Inicio Rápido
+## � Acceiso al Proyecto
 
-### Requisitos
-- Docker & Docker Compose
-- Python 3.11+ (para desarrollo local)
-- Node.js 18+ (para frontend)
-
-### Instalación
-
-1. **Clonar repositorio**
+### Clonar el código fuente:
 ```bash
-git clone <repo-url>
-cd proyecto-sgd
+git clone https://github.com/FerPaye01/Sistema-de-Gesti-n-Documental-Inteligente.git
+cd Sistema-de-Gesti-n-Documental-Inteligente
 ```
 
-2. **Configurar variables de entorno**
+### Instalación rápida:
 ```bash
+# 1. Configurar variables de entorno
 cp backend/.env.example backend/.env
-# Editar backend/.env con tus credenciales
-```
 
-3. **Iniciar servicios**
-```bash
+# 2. Instalar dependencias (opcional para desarrollo local)
+cd backend && pip install -r requirements.txt
+cd ../frontend && npm install
+
+# 3. Iniciar servicios
 docker-compose up -d
+
+# 4. Acceder a la aplicación
+# Frontend: http://localhost:3000
+# API: http://localhost:8000
+# Docs: http://localhost:8000/docs
 ```
 
-4. **Acceder a la aplicación**
-- Frontend: http://localhost:3000
-- API: http://localhost:8000
-- Docs: http://localhost:8000/docs
-
-**Para más detalles, ver:** [docs/INSTALACION.md](docs/INSTALACION.md)
+**Para instalación detallada, ver:** [docs/INSTALACION.md](docs/INSTALACION.md)
 
 ## 📁 Estructura del Proyecto
 
@@ -142,18 +150,29 @@ API_BASE_URL=http://localhost:8000
 ENVIRONMENT=development
 ```
 
-## 📚 Documentación
+## � DTecnologías Utilizadas
 
-| Documento | Descripción |
-|-----------|-------------|
-| [docs/COMIENZA_AQUI.md](docs/COMIENZA_AQUI.md) | Punto de entrada para todos |
-| [docs/INSTALACION.md](docs/INSTALACION.md) | Guía de instalación paso a paso |
-| [docs/API.md](docs/API.md) | Documentación completa de endpoints |
-| [docs/ARQUITECTURA.md](docs/ARQUITECTURA.md) | Diseño y arquitectura del sistema |
-| [docs/DESARROLLO.md](docs/DESARROLLO.md) | Guía para desarrolladores |
-| [docs/REFERENCIA_RAPIDA.md](docs/REFERENCIA_RAPIDA.md) | Comandos y URLs esenciales |
-| [docs/SEGURIDAD.md](docs/SEGURIDAD.md) | Guía de seguridad |
-| [docs/INDICE.md](docs/INDICE.md) | Índice completo de documentación |
+**Backend:**
+- FastAPI: Framework web Python
+- PostgreSQL + pgvector: Base de datos con búsqueda vectorial
+- SQLAlchemy: ORM para base de datos
+- Celery: Cola de tareas asincrónicas
+- Redis: Cache y broker de mensajes
+- Google Gemini: Extracción de metadatos con IA
+- Google Text Embedding: Generación de embeddings
+- Tesseract: OCR para extracción de texto
+
+**Frontend:**
+- React: Librería de UI
+- Vite: Build tool y dev server
+- TypeScript: Tipado estático
+- TailwindCSS: Framework de estilos
+- Axios: Cliente HTTP
+
+**Infraestructura:**
+- Docker: Containerización
+- Docker Compose: Orquestación de servicios
+- MinIO: Almacenamiento de objetos
 
 ## 🔌 API Endpoints
 
@@ -238,6 +257,74 @@ npm run dev
 npm run build
 ```
 
+## 🧪 Prueba Final - Comandos Completos
+
+### 1. Limpieza Completa
+```bash
+# Detener servicios y eliminar volúmenes
+docker-compose down -v
+
+# Eliminar imágenes
+docker rmi proyecto-sgd-backend proyecto-sgd-frontend proyecto-sgd-celery
+
+# Limpiar sistema Docker (opcional)
+docker system prune -a -f
+```
+
+### 2. Reconstruir y Subir
+```bash
+# Reconstruir imágenes desde cero
+docker-compose build --no-cache
+
+# Iniciar servicios
+docker-compose up -d
+
+# Esperar a que todo esté listo (30 segundos)
+Start-Sleep -Seconds 30
+```
+
+### 3. Verificar que Funciona
+```bash
+# Ver estado de servicios
+docker-compose ps
+
+# Health check del backend
+curl http://localhost:8000/health
+
+# Ver logs del backend
+docker-compose logs backend --tail=20
+
+# Ver logs de PostgreSQL
+docker-compose logs postgres --tail=20
+```
+
+### 4. Acceder a la Aplicación
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
+- **MinIO**: http://localhost:9001
+
+### 5. Pruebas Rápidas
+```bash
+# Verificar base de datos
+docker exec sgd-postgres psql -U sgd_user -d sgd_ugel -c "\dt"
+
+# Verificar Redis
+docker exec sgd-redis redis-cli ping
+
+# Verificar MinIO
+curl http://localhost:9000/minio/health/live
+```
+
+### 6. Detener Todo
+```bash
+# Detener servicios (sin borrar datos)
+docker-compose stop
+
+# Detener y borrar todo (incluyendo datos)
+docker-compose down -v
+```
+
 ## 📊 Monitoreo
 
 ### Health Check
@@ -264,6 +351,17 @@ Para solucionar problemas comunes, ver:
 - [docs/SEGURIDAD.md](docs/SEGURIDAD.md) (problemas de seguridad)
 
 
-## 👥 Contacto
+## � ‍💻 Personas Desarrolladoras
 
-Para soporte o consultas, contactar al equipo de desarrollo.
+**Oscar Fernando Paye Cahui** - Autor
+
+- 🐙 GitHub: [@FerPaye01](https://github.com/FerPaye01)
+- 💼 LinkedIn: [oscar-paye01](https://www.linkedin.com/in/oscar-paye01/)
+
+## 📜 Licencia
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo LICENSE para más detalles.
+
+---
+
+**¿Preguntas o sugerencias?** Abre un issue en GitHub o contacta al equipo de desarrollo.
