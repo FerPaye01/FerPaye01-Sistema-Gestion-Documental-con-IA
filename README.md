@@ -2,6 +2,37 @@
 
 📚 **Documentación completa en la carpeta [`docs/`](docs/)**
 
+## 🏆 Insignias
+
+![Python](https://img.shields.io/badge/Python-3.9+-3776ab?style=flat-square&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688?style=flat-square&logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-18+-61dafb?style=flat-square&logo=react&logoColor=black)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-336791?style=flat-square&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ed?style=flat-square&logo=docker&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)
+![Status](https://img.shields.io/badge/Status-Production-brightgreen?style=flat-square)
+![Version](https://img.shields.io/badge/Version-2.0-blue?style=flat-square)
+## 📌 Índice
+
+- [Descripción](#-descripción)
+- [Estado del Proyecto](#--estado-del-proyecto)
+- [Funciones y Aplicaciones](#-funciones-y-aplicaciones)
+- [Características Principales](#-características-principales)
+- [Arquitectura](#-arquitectura)
+- [Acceso al Proyecto](#--acceso-al-proyecto)
+- [Estructura del Proyecto](#-estructura-del-proyecto)
+- [Configuración](#-configuración)
+- [Tecnologías Utilizadas](#--tecnologías-utilizadas)
+- [API Endpoints](#-api-endpoints)
+- [Base de Datos](#-base-de-datos)
+- [Búsqueda Semántica](#-búsqueda-semántica)
+- [Desarrollo](#-desarrollo)
+- [Prueba Final](#-prueba-final---comandos-completos)
+- [Monitoreo](#-monitoreo)
+- [Troubleshooting](#-troubleshooting)
+- [Personas Desarrolladoras](#--personas-desarrolladoras)
+- [Licencia](#-licencia)
+
 ## 📙 Descripción
 
 Sistema de Gestión Documental (SGD) inteligente que implementa búsqueda semántica con IA, extracción automática de metadatos, OCR y clasificación de documentos administrativos.
@@ -13,15 +44,23 @@ Actualmente el proyecto se encuentra en **producción**. El sistema está comple
 **Versión**: 2.0  
 **Última actualización**: Noviembre 2025
 
-## 📌 Índice
+## 🎥 Funciones y Aplicaciones
 
-- [Descripción](#-descripción)
-- [Estado del Proyecto](#-estado-del-proyecto)
-- [Características](#-características-principales)
-- [Acceso al Proyecto](#-acceso-al-proyecto)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Personas Desarrolladoras](#-personas-desarrolladoras)
-- [Licencia](#-licencia)
+- **Subir documentos**: Carga de PDFs y JPG con procesamiento automático
+- **Búsqueda inteligente**: Búsqueda semántica por contenido usando IA y embeddings vectoriales (768 dimensiones)
+- **Extracción de metadatos**: Clasificación automática con Gemini LLM
+- **OCR inteligente**: Extracción de texto de documentos escaneados con Tesseract
+- **Fragmentación automática**: División de documentos en fragmentos procesables con embeddings
+- **Visualización**: Interfaz web moderna y responsiva con React/Vite
+- **API REST**: Endpoints documentados con Swagger para integración con otros sistemas
+- **Auditoría**: Registro completo de cambios y accesos con trazabilidad
+- **Monitoreo**: Health checks detallados y logging estructurado de todas las operaciones
+- **Procesamiento asincrónico**: Cola de tareas con Celery y Redis para procesamiento en background
+- **Almacenamiento escalable**: Integración con MinIO para gestión de archivos
+- **Búsqueda avanzada**: Filtrado por tipo de documento, rango de fechas y relevancia
+- **Gestión de tareas**: Seguimiento de estado y progreso de procesamiento de documentos
+
+
 
 ## 🎯 Características Principales
 
