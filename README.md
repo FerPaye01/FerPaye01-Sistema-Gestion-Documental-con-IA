@@ -100,8 +100,8 @@ Actualmente el proyecto se encuentra en **producción**. El sistema está comple
 
 ### Clonar el código fuente:
 ```bash
-git clone https://github.com/FerPaye01/Sistema-de-Gesti-n-Documental-Inteligente.git
-cd Sistema-de-Gesti-n-Documental-Inteligente
+git clone https://github.com/FerPaye01/Sistema-de-Gestion-Documental-con-IA.git
+cd Sistema-de-Gestion-Documental-con-IA
 ```
 
 ### Instalación rápida:
